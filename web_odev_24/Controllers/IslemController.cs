@@ -57,6 +57,10 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+
+
+
         public async Task<IActionResult> Create([Bind("islemID,islem_ad,islem_ucret,calisanID")] Islem islem)
         {
             if (ModelState.IsValid)
