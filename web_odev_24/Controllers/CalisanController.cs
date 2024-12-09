@@ -19,13 +19,26 @@ namespace web_odev_24.Controllers
         }
 
         // GET: Calisan
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Calisanlari_goruntule()
         {
-            return View(await _context.Calisanlar.ToListAsync());
+            var calisanListesi = from calisan in _context.Calisanlar
+                                 join islem in _context.Islemler
+                                 on calisan.islemID equals islem.islemID
+                                 select new CalisanViewModel
+                                 {
+                                     calisanID = calisan.calisanID,
+                                     calisan_ad = calisan.calisan_ad,
+                                     calisan_soyad = calisan.calisan_soyad,
+                                     calisan_tecrube = calisan.calisan_tecrube,
+                                     islem_ad = islem.islem_ad
+                                 };
+
+            return View(await calisanListesi.ToListAsync());
+            // return View(await _context.Calisanlar.ToListAsync());
         }
 
         // GET: Calisan/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Detay(int? id)
         {
             if (id == null)
             {
@@ -43,9 +56,9 @@ namespace web_odev_24.Controllers
         }
 
         // GET: Calisan/Create
-        public IActionResult Create()
+        public IActionResult Calisan_ekle()
         {
-
+            ViewBag.IslemlerListe = new SelectList(_context.Islemler.ToList(), "islemID", "islem_ad");
             return View();
         }
 
@@ -54,19 +67,18 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
+        public async Task<IActionResult> Calisan_ekle([Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(calisan);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(calisan);
+                return RedirectToAction(nameof(Calisanlari_goruntule));
+           
+            //return View(calisan);
         }
 
         // GET: Calisan/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Duzenle(int? id)
         {
             if (id == null)
             {
@@ -86,7 +98,7 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
+        public async Task<IActionResult> Duzenle(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
         {
             if (id != calisan.calisanID)
             {
@@ -111,13 +123,13 @@ namespace web_odev_24.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Calisanlari_goruntule));
             }
             return View(calisan);
         }
 
         // GET: Calisan/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Calisan_sil(int? id)
         {
             if (id == null)
             {
@@ -135,7 +147,7 @@ namespace web_odev_24.Controllers
         }
 
         // POST: Calisan/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Calisan_sil")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

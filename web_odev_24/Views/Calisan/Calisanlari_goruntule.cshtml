@@ -1,13 +1,8 @@
-﻿@model IEnumerable<web_odev_24.Models.Calisan>
-
-@{
-    ViewData["Title"] = "Index";
-}
-
+﻿@model IEnumerable<CalisanViewModel>
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Calisanlari_goruntule"></a>
 </p>
 <table class="table">
     <thead>
@@ -22,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.calisan_tecrube)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.islemID)
+                @Html.DisplayNameFor(model => model.islem_ad)
             </th>
             <th></th>
         </tr>
@@ -40,7 +35,7 @@
                 @Html.DisplayFor(modelItem => item.calisan_tecrube)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.islemID)
+                @Html.DisplayFor(modelItem => item.islem_ad)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.calisanID">Edit</a> |
