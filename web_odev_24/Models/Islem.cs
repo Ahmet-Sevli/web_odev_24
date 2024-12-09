@@ -19,13 +19,14 @@ namespace web_odev_24.Models
         [DataType(DataType.Currency)]
         public int islem_ucret { get; set; }
 
-        [Display(Name = "Çalışan adı")]
-        public int calisanID { get; set; }
-        [Display(Name = "Çalışan adı")]
-        public Calisan calisan { get; set; }
+        [Required(ErrorMessage = "İşlem süresi boş bırakılamaz.")]
+        [Display(Name = "İşlem süresi")]
+        [Range(0, double.MaxValue, ErrorMessage = "süre negatif olamaz.")]
+        
+        public int islem_sure { get; set; }
 
 
-
+        public ICollection<Calisan> Calisanlar { get; set; }
 
     }
 }

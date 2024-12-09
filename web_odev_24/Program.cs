@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Get the connection string from appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("BerberDatabase");
+var connectionString = builder.Configuration.GetConnectionString("Berber24Database");
 
 // Add DbContext to the DI container
 builder.Services.AddDbContext<web_odev_24.Models.BerberContext>(options =>
