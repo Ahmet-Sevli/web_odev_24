@@ -38,7 +38,7 @@ namespace web_odev_24.Controllers
         }
 
         // GET: Calisan/Details/5
-        public async Task<IActionResult> Detay(int? id)
+        public async Task<IActionResult> Calisan_detay(int? id)
         {
             if (id == null)
             {
@@ -78,8 +78,9 @@ namespace web_odev_24.Controllers
         }
 
         // GET: Calisan/Edit/5
-        public async Task<IActionResult> Duzenle(int? id)
+        public async Task<IActionResult> Calisan_duzenle(int? id)
         {
+            ViewBag.IslemlerListe = new SelectList(await _context.Islemler.ToListAsync(), "islemID", "islem_ad");
             if (id == null)
             {
                 return NotFound();
@@ -90,6 +91,7 @@ namespace web_odev_24.Controllers
             {
                 return NotFound();
             }
+
             return View(calisan);
         }
 
@@ -98,7 +100,7 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Duzenle(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
+        public async Task<IActionResult> Calisan_duzenle(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
         {
             if (id != calisan.calisanID)
             {

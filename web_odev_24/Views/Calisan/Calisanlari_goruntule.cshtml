@@ -19,6 +19,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.islem_ad)
             </th>
+
+            <th>
+                 Düzenleme Seçenekleri
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,9 +42,9 @@
                 @Html.DisplayFor(modelItem => item.islem_ad)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.calisanID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.calisanID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.calisanID">Delete</a>
+                <a asp-action="Calisan_duzenle" asp-route-id="@item.calisanID">Düzenle</a> |
+                <a asp-action="Calisan_detay" asp-route-id="@item.calisanID">Detay</a> |
+               <a asp-action="Calisan_sil" asp-route-id="@item.calisanID">Sil</a>
             </td>
         </tr>
 }
