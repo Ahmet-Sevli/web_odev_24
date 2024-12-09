@@ -25,8 +25,8 @@ namespace web_odev_24.Models
 
         [Display(Name = "İşlem Becerisi ")]
         public int islemID { get; set; }
-        
-        public Islem islem { get; set; }
+
+        public ICollection<Islem> Islemler { get; set; } = null!;
 
         
 

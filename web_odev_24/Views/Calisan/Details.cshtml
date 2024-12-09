@@ -1,0 +1,42 @@
+﻿@model web_odev_24.Models.Calisan
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Calisan</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.calisan_ad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.calisan_ad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.calisan_soyad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.calisan_soyad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.calisan_tecrube)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.calisan_tecrube)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.islemID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.islemID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.calisanID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
