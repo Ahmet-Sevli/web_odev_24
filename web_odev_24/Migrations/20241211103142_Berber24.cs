@@ -25,6 +25,24 @@ namespace web_odev_24.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Calisanlar",
+                columns: table => new
+                {
+                    calisanID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    calisan_ad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    calisan_soyad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    calisan_telefon = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    calisan_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    calisan_tecrube = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    islemID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Calisanlar", x => x.calisanID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Islemler",
                 columns: table => new
                 {
@@ -57,31 +75,33 @@ namespace web_odev_24.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Calisanlar",
+                name: "CalisanIslem",
                 columns: table => new
                 {
-                    calisanID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    calisan_ad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    calisan_soyad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    calisan_tecrube = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    islemID = table.Column<int>(type: "int", nullable: false)
+                    CalisanlarcalisanID = table.Column<int>(type: "int", nullable: false),
+                    IslemlerislemID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Calisanlar", x => x.calisanID);
+                    table.PrimaryKey("PK_CalisanIslem", x => new { x.CalisanlarcalisanID, x.IslemlerislemID });
                     table.ForeignKey(
-                        name: "FK_Calisanlar_Islemler_islemID",
-                        column: x => x.islemID,
+                        name: "FK_CalisanIslem_Calisanlar_CalisanlarcalisanID",
+                        column: x => x.CalisanlarcalisanID,
+                        principalTable: "Calisanlar",
+                        principalColumn: "calisanID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CalisanIslem_Islemler_IslemlerislemID",
+                        column: x => x.IslemlerislemID,
                         principalTable: "Islemler",
                         principalColumn: "islemID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Calisanlar_islemID",
-                table: "Calisanlar",
-                column: "islemID");
+                name: "IX_CalisanIslem_IslemlerislemID",
+                table: "CalisanIslem",
+                column: "IslemlerislemID");
         }
 
         /// <inheritdoc />
@@ -91,10 +111,13 @@ namespace web_odev_24.Migrations
                 name: "Adminler");
 
             migrationBuilder.DropTable(
-                name: "Calisanlar");
+                name: "CalisanIslem");
 
             migrationBuilder.DropTable(
                 name: "Musteriler");
+
+            migrationBuilder.DropTable(
+                name: "Calisanlar");
 
             migrationBuilder.DropTable(
                 name: "Islemler");

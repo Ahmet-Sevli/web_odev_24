@@ -1,5 +1,4 @@
-﻿@model web_odev_24.Models.Calisan
-
+﻿@model web_odev_24.Models.CalisanViewModel
 
 <div>
     <h4>Calisan</h4>
@@ -23,15 +22,34 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.calisan_tecrube)
         </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.calisan_telefon)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.calisan_telefon)
+        </dd>
+
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.calisan_email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.calisan_email)
+        </dd>
+
+
+
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.islemID)
+            @Html.DisplayNameFor(model => model.islem_ad)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.islemID)
+            @Html.DisplayFor(model => model.islem_ad)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.calisanID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Calisan_duzenle" asp-route-id="@Model?.calisanID"></a> |
+    <a asp-action="Calisanlari_goruntule">Back to List</a>
 </div>

@@ -11,7 +11,7 @@ using web_odev_24.Models;
 namespace web_odev_24.Migrations
 {
     [DbContext(typeof(BerberContext))]
-    [Migration("20241209203458_Berber24")]
+    [Migration("20241211103142_Berber24")]
     partial class Berber24
     {
         /// <inheritdoc />
@@ -23,6 +23,21 @@ namespace web_odev_24.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CalisanIslem", b =>
+                {
+                    b.Property<int>("CalisanlarcalisanID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IslemlerislemID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CalisanlarcalisanID", "IslemlerislemID");
+
+                    b.HasIndex("IslemlerislemID");
+
+                    b.ToTable("CalisanIslem");
+                });
 
             modelBuilder.Entity("web_odev_24.Models.Admin", b =>
                 {
@@ -58,6 +73,10 @@ namespace web_odev_24.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("calisan_email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("calisan_soyad")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -68,12 +87,14 @@ namespace web_odev_24.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("calisan_telefon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("islemID")
                         .HasColumnType("int");
 
                     b.HasKey("calisanID");
-
-                    b.HasIndex("islemID");
 
                     b.ToTable("Calisanlar");
                 });
@@ -137,20 +158,19 @@ namespace web_odev_24.Migrations
                     b.ToTable("Musteriler");
                 });
 
-            modelBuilder.Entity("web_odev_24.Models.Calisan", b =>
+            modelBuilder.Entity("CalisanIslem", b =>
                 {
-                    b.HasOne("web_odev_24.Models.Islem", "islem")
-                        .WithMany("Calisanlar")
-                        .HasForeignKey("islemID")
+                    b.HasOne("web_odev_24.Models.Calisan", null)
+                        .WithMany()
+                        .HasForeignKey("CalisanlarcalisanID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("islem");
-                });
-
-            modelBuilder.Entity("web_odev_24.Models.Islem", b =>
-                {
-                    b.Navigation("Calisanlar");
+                    b.HasOne("web_odev_24.Models.Islem", null)
+                        .WithMany()
+                        .HasForeignKey("IslemlerislemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

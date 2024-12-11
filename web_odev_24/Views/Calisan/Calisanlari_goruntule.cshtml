@@ -1,7 +1,5 @@
 ﻿@model IEnumerable<CalisanViewModel>
-<h1>Index</h1>
 
-<p>
     <a asp-action="Calisanlari_goruntule"></a>
 </p>
 <table class="table">
@@ -42,9 +40,10 @@
                 @Html.DisplayFor(modelItem => item.islem_ad)
             </td>
             <td>
-                <a asp-action="Calisan_duzenle" asp-route-id="@item.calisanID">Düzenle</a> |
-                <a asp-action="Calisan_detay" asp-route-id="@item.calisanID">Detay</a> |
-               <a asp-action="Calisan_sil" asp-route-id="@item.calisanID">Sil</a>
+                    <a asp-controller="Calisan" asp-action="Calisan_duzenle" asp-route-id="@item.calisanID" class="btn btn-outline-success">Düzenle</a>
+                    <a asp-controller="Calisan" asp-action="Calisan_detay" asp-route-id="@item.calisanID" class="btn btn-outline-info">Detay</a>
+                    <a asp-controller="Calisan" asp-action="Calisan_sil" asp-route-id="@item.calisanID" class="btn btn-outline-danger">Sil</a>
+
             </td>
         </tr>
 }

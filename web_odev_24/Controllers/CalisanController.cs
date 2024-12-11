@@ -30,6 +30,8 @@ namespace web_odev_24.Controllers
                                      calisan_ad = calisan.calisan_ad,
                                      calisan_soyad = calisan.calisan_soyad,
                                      calisan_tecrube = calisan.calisan_tecrube,
+                                     calisan_telefon=calisan.calisan_telefon,
+                                     calisan_email=calisan.calisan_email,   
                                      islem_ad = islem.islem_ad
                                  };
 
@@ -45,12 +47,24 @@ namespace web_odev_24.Controllers
                 return NotFound();
             }
 
-            var calisan = await _context.Calisanlar
-                .FirstOrDefaultAsync(m => m.calisanID == id);
+            var calisan = await (from c in _context.Calisanlar
+                                 join i in _context.Islemler on c.islemID equals i.islemID
+                                 where c.calisanID == id
+                                 select new CalisanViewModel
+                                 {
+                                     calisanID = c.calisanID,
+                                     calisan_ad = c.calisan_ad,
+                                     calisan_soyad = c.calisan_soyad,
+                                     calisan_tecrube=c.calisan_tecrube,
+                                     calisan_telefon = c.calisan_telefon,
+                                     calisan_email = c.calisan_email,
+                                     islem_ad = i.islem_ad  // İşlem adını alıyoruz
+                                 }).FirstOrDefaultAsync();
             if (calisan == null)
             {
                 return NotFound();
             }
+
 
             return View(calisan);
         }
@@ -67,7 +81,7 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Calisan_ekle([Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
+        public async Task<IActionResult> Calisan_ekle([Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,calisan_telefon,calisan_email,islemID")] Calisan calisan)
         {
             
                 _context.Add(calisan);
@@ -100,12 +114,14 @@ namespace web_odev_24.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Calisan_duzenle(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,islemID")] Calisan calisan)
+        public async Task<IActionResult> Calisan_duzenle(int id, [Bind("calisanID,calisan_ad,calisan_soyad,calisan_tecrube,calisan_telefon,calisan_email,islemID")] Calisan calisan)
         {
             if (id != calisan.calisanID)
             {
                 return NotFound();
             }
+
+            
 
             if (ModelState.IsValid)
             {
@@ -125,7 +141,16 @@ namespace web_odev_24.Controllers
                         throw;
                     }
                 }
+
+                
                 return RedirectToAction(nameof(Calisanlari_goruntule));
+            }
+
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.IslemlerListe = new SelectList(await _context.Islemler.ToListAsync(), "islemID", "islem_ad");
+                //return View(calisan);
             }
             return View(calisan);
         }
@@ -160,7 +185,7 @@ namespace web_odev_24.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Calisanlari_goruntule));
         }
 
         private bool CalisanExists(int id)
