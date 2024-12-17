@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Kullanıcı Girişi";
+}
+
+<h2>Giriş Yap</h2>
+
+<!-- Hata mesajı için -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Login" asp-controller="Hesap" method="post">
+            <div class="form-group">
+                <label for="_email">E-Posta</label>
+                <input type="email" id="_email" name="_email" class="form-control" placeholder="E-posta adresinizi girin" required />
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="_sifre">Şifre</label>
+                <input type="password" id="_sifre" name="_sifre" class="form-control" placeholder="Şifrenizi girin" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Giriş Yap</button>
+        </form>
+    </div>
+</div>

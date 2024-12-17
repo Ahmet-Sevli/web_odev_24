@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using web_odev_24.Models;
 
 namespace web_odev_24.Controllers
 {
+    [Authorize(Roles = "Admin")] // Admin rolüne sahip kullanıcılar bu controller'a erişebilir
     public class CalisanController : Controller
     {
         private readonly BerberContext _context;

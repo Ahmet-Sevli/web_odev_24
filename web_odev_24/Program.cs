@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,44 @@ var connectionString = builder.Configuration.GetConnectionString("Berber24Databa
 // Add DbContext to the DI container
 builder.Services.AddDbContext<web_odev_24.Models.BerberContext>(options =>
     options.UseSqlServer(connectionString));
+
+
+// Add Authentication - Cookie-based authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Hesap/Login";         // Giriþ sayfasý
+        options.LogoutPath = "/Hesap/Logout";       // Çýkýþ sayfasý
+        options.AccessDeniedPath = "/Hesap /AccessDenied"; // Yetkisiz eriþim sayfasý
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);  // Cookie süresi
+        options.SlidingExpiration = true;             // Oturum süresini uzatma
+    });
+
+// Add Authorization (optional custom policies)
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireClaim("Role", "Admin"));
+    options.AddPolicy("CustomerPolicy", policy => policy.RequireClaim("Role", "Customer"));
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var app = builder.Build();
 
@@ -27,6 +66,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@{
+    var currentUserRole = User?.FindFirst(ClaimTypes.Role)?.Value;
+    var isAuthenticated = User.Identity.IsAuthenticated; // Giriş yapma durumu
+    var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value; // Giriş yapan kullanıcının e-posta adresi
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,19 +35,54 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (currentUserRole == "Admin"){
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Musteri" asp-action="Create">Müşteri ekle</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Musteri" asp-action="Index">Müşteriler</a>
+                        }
+                        @if (currentUserRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Musteri" asp-action="Index">Müşteriler</a>
                         </li>
+                        }
+                         @if (currentUserRole=="Admin") {   
                          <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Calisan" asp-action="Calisanlari_goruntule">Çalışanlar</a>
                         </li>
+                         }
+                        @if (currentUserRole=="Admin") {   
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Calisan" asp-action="Calisan_ekle">Çalışan Ekle</a>
-                        </li>
+                            </li>
+                        }
+
+                        
                     </ul>
+
+
+                    <!-- Giriş yap butonunu sağa hizalama -->
+                    <ul class="navbar-nav ml-auto">
+                        @if (isAuthenticated)
+                           
+                            {
+                                <li class="nav-item">
+                                <span class="nav-link text-dark">@User.FindFirst(ClaimTypes.Email)?.Value</span> <!-- E-posta adresi gösteriliyor -->
+                                </li>
+                                <li class="nav-item">
+                                <form action="@Url.Action("Logout", "Hesap")" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Çıkış Yap</button>
+                                </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Login", "Hesap")">Giriş Yap</a>
+                                </li>
+                            }
+                    </ul>
+
                 </div>
             </div>
         </nav>

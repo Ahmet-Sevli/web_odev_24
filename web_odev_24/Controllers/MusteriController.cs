@@ -9,22 +9,22 @@ using web_odev_24.Models;
 
 namespace web_odev_24.Controllers
 {
-    public class IslemController : Controller
+    public class MusteriController : Controller
     {
         private readonly BerberContext _context;
 
-        public IslemController(BerberContext context)
+        public MusteriController(BerberContext context)
         {
             _context = context;
         }
 
-        // GET: Islem
+        // GET: Musteri
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Islemler.ToListAsync());
+            return View(await _context.Musteriler.ToListAsync());
         }
 
-        // GET: Islem/Details/5
+        // GET: Musteri/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,45 +32,39 @@ namespace web_odev_24.Controllers
                 return NotFound();
             }
 
-            var islem = await _context.Islemler
-                .FirstOrDefaultAsync(m => m.islemID == id);
-            if (islem == null)
+            var musteri = await _context.Musteriler
+                .FirstOrDefaultAsync(m => m.musteriID == id);
+            if (musteri == null)
             {
                 return NotFound();
             }
 
-            return View(islem);
+            return View(musteri);
         }
 
-        // GET: Islem/Create
+        // GET: Musteri/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Islem/Create
+        // POST: Musteri/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("islemID,islem_ad,islem_ucret,islem_sure")] Islem islem)
+        public async Task<IActionResult> Create([Bind("musteriID,musteri_ad,musteri_soyad,musteri_telefon,musteri_email,musteri_sifre")] Musteri musteri)
         {
-
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                // View'a hata mesajlarını gönder
-                return View(islem);
-            }
-
-
-            _context.Islemler.Add(islem);
+                _context.Add(musteri);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            
-            //return View(islem);
+            }
+            return View(musteri);
         }
 
-        // GET: Islem/Edit/5
+        // GET: Musteri/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +72,22 @@ namespace web_odev_24.Controllers
                 return NotFound();
             }
 
-            var islem = await _context.Islemler.FindAsync(id);
-            if (islem == null)
+            var musteri = await _context.Musteriler.FindAsync(id);
+            if (musteri == null)
             {
                 return NotFound();
             }
-            return View(islem);
+            return View(musteri);
         }
 
-        // POST: Islem/Edit/5
+        // POST: Musteri/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("islemID,islem_ad,islem_ucret,islem_sure")] Islem islem)
+        public async Task<IActionResult> Edit(int id, [Bind("musteriID,musteri_ad,musteri_soyad,musteri_telefon,musteri_email,musteri_sifre")] Musteri musteri)
         {
-            if (id != islem.islemID)
+            if (id != musteri.musteriID)
             {
                 return NotFound();
             }
@@ -102,12 +96,12 @@ namespace web_odev_24.Controllers
             {
                 try
                 {
-                    _context.Update(islem);
+                    _context.Update(musteri);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IslemExists(islem.islemID))
+                    if (!MusteriExists(musteri.musteriID))
                     {
                         return NotFound();
                     }
@@ -118,10 +112,10 @@ namespace web_odev_24.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(islem);
+            return View(musteri);
         }
 
-        // GET: Islem/Delete/5
+        // GET: Musteri/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,34 +123,34 @@ namespace web_odev_24.Controllers
                 return NotFound();
             }
 
-            var islem = await _context.Islemler
-                .FirstOrDefaultAsync(m => m.islemID == id);
-            if (islem == null)
+            var musteri = await _context.Musteriler
+                .FirstOrDefaultAsync(m => m.musteriID == id);
+            if (musteri == null)
             {
                 return NotFound();
             }
 
-            return View(islem);
+            return View(musteri);
         }
 
-        // POST: Islem/Delete/5
+        // POST: Musteri/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var islem = await _context.Islemler.FindAsync(id);
-            if (islem != null)
+            var musteri = await _context.Musteriler.FindAsync(id);
+            if (musteri != null)
             {
-                _context.Islemler.Remove(islem);
+                _context.Musteriler.Remove(musteri);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool IslemExists(int id)
+        private bool MusteriExists(int id)
         {
-            return _context.Islemler.Any(e => e.islemID == id);
+            return _context.Musteriler.Any(e => e.musteriID == id);
         }
     }
 }
