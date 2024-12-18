@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -55,11 +58,36 @@ namespace web_odev_24.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("musteriID,musteri_ad,musteri_soyad,musteri_telefon,musteri_email,musteri_sifre")] Musteri musteri)
         {
+
+            // E-posta kontrolü (müşteri daha önce kayıtlı mı?)
+            var existingCustomer = _context.Musteriler.FirstOrDefault(m => m.musteri_email == musteri.musteri_email);
+            if (existingCustomer != null)
+            {
+                ModelState.AddModelError("musteri_email", "Bu e-posta adresiyle zaten bir hesap kayıtlı.");
+                return View(musteri);
+            }
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(musteri);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // Claims oluştur ve kullanıcıyı giriş yapmış gibi işaretle
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, musteri.musteri_email),
+                    new Claim(ClaimTypes.Role, "Musteri"),
+                    new Claim(ClaimTypes.Email, musteri.musteri_email),
+                    new Claim("musteriId", musteri.musteriID.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+
+
+                return RedirectToAction("Index","Home");
             }
             return View(musteri);
         }
