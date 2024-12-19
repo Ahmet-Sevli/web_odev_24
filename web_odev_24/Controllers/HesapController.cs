@@ -8,7 +8,6 @@ namespace web_odev_24.Controllers
 {
     public class HesapController : Controller
     {
-
         private readonly BerberContext _context; // Veritabanı bağlamı (EF Core veya benzeri)
 
         public HesapController(BerberContext context)
@@ -25,17 +24,23 @@ namespace web_odev_24.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string _email, string _sifre)
         {
+            if (string.IsNullOrEmpty(_email) || string.IsNullOrEmpty(_sifre))
+            {
+                ModelState.AddModelError("", "E-posta ve şifre alanları doldurulmalıdır.");
+                return View();
+            }
+
             // Admin tablosunda kontrol
-            var Admin = _context.Adminler.FirstOrDefault(a => a.admin_email == _email && a.admin_sifre == _sifre);
-            if (Admin != null)
+            var admin = _context.Adminler.FirstOrDefault(a => a.admin_email == _email && a.admin_sifre == _sifre);
+            if (admin != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, _email),
-                new Claim(ClaimTypes.Role, "Admin"),// Admin rolü
-                 new Claim(ClaimTypes.Email, _email),
-                 new Claim("adminId", Admin.adminID.ToString()) // Kendi ID'sini taşıyan özel claim
-            };
+                {
+                    new Claim(ClaimTypes.Name, _email),
+                    new Claim(ClaimTypes.Role, "Admin"), // Admin rolü
+                    new Claim(ClaimTypes.Email, _email),
+                    new Claim("adminID", admin.adminID.ToString()) // Kendi ID'sini taşıyan özel claim
+                };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -44,16 +49,17 @@ namespace web_odev_24.Controllers
             }
 
             // Müşteri tablosunda kontrol
-            var Musteri = _context.Musteriler.FirstOrDefault(c => c.musteri_email == _email && c.musteri_sifre == _sifre);
-            if (Musteri != null)
+            var musteri = _context.Musteriler.FirstOrDefault(c => c.musteri_email == _email && c.musteri_sifre == _sifre);
+            if (musteri != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, _email),
-               new Claim(ClaimTypes.Role, "Musteri"), // Müşteri rolü
-                new Claim(ClaimTypes.Email, _email),
-                new Claim("musteriId", Musteri.musteriID.ToString()) // Kendi ID'sini taşıyan özel claim
-            };
+                {
+                    new Claim(ClaimTypes.Name, _email),
+                    new Claim(ClaimTypes.Role, "Musteri"), // Müşteri rolü
+                    new Claim(ClaimTypes.Email, _email),
+                    new Claim(ClaimTypes.NameIdentifier, musteri.musteriID.ToString()),
+                    new Claim("musteriID", musteri.musteriID.ToString()) // Kendi ID'sini taşıyan özel claim
+                };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -71,11 +77,6 @@ namespace web_odev_24.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
-
-
-
-
-
 
         public IActionResult Index()
         {

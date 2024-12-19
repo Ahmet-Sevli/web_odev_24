@@ -20,8 +20,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Hesap/Login";         // Giriþ sayfasý
         options.LogoutPath = "/Hesap/Logout";       // Çýkýþ sayfasý
-        options.AccessDeniedPath = "/Hesap /AccessDenied"; // Yetkisiz eriþim sayfasý
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);  // Cookie süresi
+        options.AccessDeniedPath = "/Hesap/AccessDenied"; // Yetkisiz eriþim sayfasý
+        options.ExpireTimeSpan = TimeSpan.FromDays(15);  // Cookie süresi
         options.SlidingExpiration = true;             // Oturum süresini uzatma
     });
 

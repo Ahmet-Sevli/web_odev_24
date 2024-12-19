@@ -15,7 +15,9 @@ namespace web_odev_24.Models
         public DbSet<Admin> Adminler { get; set; }
         public DbSet<Islem> Islemler { get; set; }
 
-        
+        public DbSet<Randevu> Randevular { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Berber24;Trusted_Connection=True;");

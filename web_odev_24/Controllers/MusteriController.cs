@@ -76,15 +76,21 @@ namespace web_odev_24.Controllers
                 // Claims oluştur ve kullanıcıyı giriş yapmış gibi işaretle
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, musteri.musteri_email),
+                    new Claim(ClaimTypes.Name, musteri.musteri_ad),
                     new Claim(ClaimTypes.Role, "Musteri"),
                     new Claim(ClaimTypes.Email, musteri.musteri_email),
-                    new Claim("musteriId", musteri.musteriID.ToString())
+                    new Claim(ClaimTypes.NameIdentifier,musteri.musteriID.ToString())
+                    //new Claim("musteriID", musteri.musteriID.ToString())
                 };
+
+                foreach (var claim in claims)
+                {
+                    Console.WriteLine($"Claim: {claim.Type}, Value: {claim.Value}");
+                }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
+                
 
 
                 return RedirectToAction("Index","Home");

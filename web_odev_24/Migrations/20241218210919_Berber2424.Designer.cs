@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web_odev_24.Models;
 
@@ -11,9 +12,11 @@ using web_odev_24.Models;
 namespace web_odev_24.Migrations
 {
     [DbContext(typeof(BerberContext))]
-    partial class BerberContextModelSnapshot : ModelSnapshot
+    [Migration("20241218210919_Berber2424")]
+    partial class Berber2424
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

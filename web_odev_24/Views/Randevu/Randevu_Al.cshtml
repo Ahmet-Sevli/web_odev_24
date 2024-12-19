@@ -1,0 +1,82 @@
+﻿@model web_odev_24.Models.RandevuViewModel
+
+@{
+    ViewData["Title"] = "Randevu Al";
+}
+
+<h2>Randevu Al</h2>
+
+<form asp-action="Randevu_Al" method="post">
+    <div class="form-group">
+        <label>Müşteri</label>
+        <input type="text" class="form-control" value="@Model.MusteriAd" disabled />
+        <input type="hidden" asp-for="MusteriID" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RandevuTarihi"></label>
+        <input asp-for="RandevuTarihi" class="form-control" type="date" />
+        <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="RandevuSaati">Saat</label>
+        <select asp-for="RandevuSaati" class="form-control">
+            <option value="">Saat seçiniz</option>
+            @for (int hour = 9; hour <= 17; hour++)
+            {
+                <option value="@hour">@hour:00</option>
+            }
+        </select>
+        <span asp-validation-for="RandevuSaati" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Islem">İşlem</label>
+        <select id="Islem" asp-for="IslemID" class="form-control" asp-items="Model.Islemler"></select>
+        <span asp-validation-for="IslemID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Calisan">Çalışan</label>
+        <select id="Calisan" asp-for="CalisanID" class="form-control">
+            <option value="">Önce bir işlem seçiniz</option>
+        </select>
+        <span asp-validation-for="CalisanID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Randevu Al</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('#Islem').change(function () {
+                var islemID = $(this).val();
+
+                if (islemID) {
+                    $.ajax({
+                        url: '/Randevu/GetCalisanlarByIslem',
+                        type: 'GET',
+                        data: { islemID: islemID },
+                        success: function (data) {
+                            var calisanDropdown = $('#Calisan');
+                            calisanDropdown.empty();
+                            calisanDropdown.append('<option value="">Çalışan seçiniz</option>');
+                            $.each(data, function (index, calisan) {
+                                calisanDropdown.append('<option value="' + calisan.CalisanID + '">' + calisan.AdSoyad + '</option>');
+                            });
+                        },
+                        error: function () {
+                            alert('Çalışan listesi yüklenirken bir hata oluştu.');
+                        }
+                    });
+                } else {
+                    $('#Calisan').empty().append('<option value="">Önce bir işlem seçiniz</option>');
+                }
+            });
+        });
+    </script>
+}
