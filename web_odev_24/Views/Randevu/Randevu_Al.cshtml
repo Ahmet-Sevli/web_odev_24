@@ -1,4 +1,4 @@
-﻿@model web_odev_24.Models.RandevuViewModel
+﻿@model web_odev_24.Models.Randevu
 
 @{
     ViewData["Title"] = "Randevu Al";
@@ -9,71 +9,99 @@
 <form asp-action="Randevu_Al" method="post">
     <div class="form-group">
         <label>Müşteri</label>
-        <input type="text" class="form-control" value="@Model.MusteriAd" disabled />
-        <input type="hidden" asp-for="MusteriID" />
+        <input type="text" class="form-control" value="@ViewBag.MusteriAd" disabled />
+        <input type="hidden" asp-for="musteriID" value="@ViewBag.MusteriID" />
     </div>
 
     <div class="form-group">
-        <label asp-for="RandevuTarihi"></label>
-        <input asp-for="RandevuTarihi" class="form-control" type="date" />
-        <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+        <label asp-for="randevu_tarihi">Randevu Tarihi</label>
+        <input asp-for="randevu_tarihi" class="form-control" id="randevuTarihi" type="date" />
+        <span asp-validation-for="randevu_tarihi" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="RandevuSaati">Saat</label>
-        <select asp-for="RandevuSaati" class="form-control">
-            <option value="">Saat seçiniz</option>
-            @for (int hour = 9; hour <= 17; hour++)
+        <label asp-for="randevu_saati">Randevu Saati</label>
+        <select asp-for="randevu_saati" class="form-control">
+            <option value="">Saati seçiniz</option>
+            @for (int i = 9; i <= 17; i++)  
             {
-                <option value="@hour">@hour:00</option>
+                <option value="@string.Format("{0:00}:00:00", i)">@i:00</option>  <!-- Saat başları -->
             }
         </select>
-        <span asp-validation-for="RandevuSaati" class="text-danger"></span>
+        <span asp-validation-for="randevu_saati" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label for="Islem">İşlem</label>
-        <select id="Islem" asp-for="IslemID" class="form-control" asp-items="Model.Islemler"></select>
-        <span asp-validation-for="IslemID" class="text-danger"></span>
+        <select id="Islem" asp-for="islemID" class="form-control" asp-items="ViewBag.Islemler"></select>
+        <span asp-validation-for="islemID" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label for="Calisan">Çalışan</label>
-        <select id="Calisan" asp-for="CalisanID" class="form-control">
+        <select id="Calisan" asp-for="calisanID" class="form-control">
             <option value="">Önce bir işlem seçiniz</option>
         </select>
-        <span asp-validation-for="CalisanID" class="text-danger"></span>
+        <span asp-validation-for="calisanID" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Randevu Al</button>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />  <!-- Validation scripts yükleniyor -->
 
     <script>
+        // Sayfa yüklendikten sonra bu kod çalışacak
         $(document).ready(function () {
+            // Bugünün tarihini al
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // Ayı 1'den başlatıyoruz
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd; // Bugünün tarihi YYYY-MM-DD formatında
+
+            // 1 hafta sonrasının tarihini hesapla
+            todayDate = new Date();
+            todayDate.setDate(todayDate.getDate() + 7); // Bugün + 7 gün
+            var dd2 = String(todayDate.getDate()).padStart(2, '0');
+            var mm2 = String(todayDate.getMonth() + 1).padStart(2, '0'); // Ayı 1'den başlatıyoruz
+            var yyyy2 = todayDate.getFullYear();
+            var nextWeekDate = yyyy2 + '-' + mm2 + '-' + dd2;
+
+            // Randevu tarihini seçmek için input üzerinde tarih aralığını belirle
+            $('#randevuTarihi').attr('min', today);  // Bugünün tarihini disable et
+            $('#randevuTarihi').attr('max', nextWeekDate);  // 7 gün sonrası tarihini limit olarak belirle
+
+            // "Islem" select elementine bir değişiklik yapıldığında çalışacak olan fonksiyon
             $('#Islem').change(function () {
-                var islemID = $(this).val();
+                var islemID = $(this).val();  // Seçilen işlemin ID'sini al
 
                 if (islemID) {
+                    // AJAX ile, seçilen işleme göre çalışanları al
                     $.ajax({
-                        url: '/Randevu/GetCalisanlarByIslem',
-                        type: 'GET',
-                        data: { islemID: islemID },
-                        success: function (data) {
-                            var calisanDropdown = $('#Calisan');
-                            calisanDropdown.empty();
+                        url: '/Randevu/GetCalisanlarByIslem',  // İlgili endpoint
+                        type: 'GET',  // GET methodu kullanıyoruz
+                        data: { islemID: islemID },  // Parametre olarak seçilen işlem ID'si gönderiyoruz
+                        success: function (data) {  // AJAX çağrısı başarılı olduğunda çalışacak fonksiyon
+                            var calisanDropdown = $('#Calisan');  // Çalışan dropdown'ını al
+                            calisanDropdown.empty();  // Önceki listeyi temizle
+
+                            // Başlangıç olarak "Çalışan seçiniz" seçeneğini ekle
                             calisanDropdown.append('<option value="">Çalışan seçiniz</option>');
+
+                            // Dönen çalışan listesi ile dropdown'ı doldur
                             $.each(data, function (index, calisan) {
-                                calisanDropdown.append('<option value="' + calisan.CalisanID + '">' + calisan.AdSoyad + '</option>');
+                                // Her bir çalışan için yeni bir option ekliyoruz
+                                calisanDropdown.append('<option value="' + calisan.calisanID + '">' + calisan.AdSoyad + '</option>');
                             });
                         },
-                        error: function () {
+                        error: function () {  // Eğer AJAX çağrısında hata olursa çalışacak fonksiyon
                             alert('Çalışan listesi yüklenirken bir hata oluştu.');
                         }
                     });
                 } else {
+                    // Eğer işlem seçilmemişse, çalışan dropdown'ını sıfırla
                     $('#Calisan').empty().append('<option value="">Önce bir işlem seçiniz</option>');
                 }
             });

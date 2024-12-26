@@ -18,9 +18,7 @@ namespace web_odev_24.Controllers
         }
 
         // GET: Randevu/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Randevu_Al([Bind("RandevuTarihi, RandevuSaati, IslemID, CalisanID, MusteriID")] RandevuViewModel model)
+        public IActionResult Randevu_Al()
         {
             var musteriIDClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
@@ -32,36 +30,66 @@ namespace web_odev_24.Controllers
             try
             {
                 int musteriID = int.Parse(musteriIDClaim);
+                var musteri = _context.Musteriler.FirstOrDefault(m => m.musteriID == musteriID);
 
-                // Saatin 9:00 ile 17:00 arasında olduğundan emin olalım
-                TimeSpan randevuSaati = model.RandevuSaati; // Eğer RandevuSaati TimeSpan ise
-                int hour = randevuSaati.Hours; // Saat olarak al
-
-                if (hour < 9 || hour > 17)
+                if (musteri == null)
                 {
-                    ModelState.AddModelError("", "Randevular sadece 9:00 ile 17:00 arasında alınabilir.");
-                    return View(model);
+                    return Unauthorized();
                 }
 
-                var randevu = new RandevuViewModel
+                ViewBag.Islemler = new SelectList(_context.Islemler, "islemID", "islem_ad");
+                ViewBag.MusteriAd = musteri.musteri_ad + " " + musteri.musteri_soyad;
+                ViewBag.MusteriID = musteri.musteriID;
+
+                return View();
+            }
+            catch (FormatException)
+            {
+                return RedirectToAction("Login", "Hesap");
+            }
+        }
+
+        // POST: Randevu/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Randevu_Al([Bind("randevu_tarihi,randevu_saati,islemID,calisanID")] Randevu randevu)
+        {
+            var musteriIDClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (musteriIDClaim == null)
+            {
+                return RedirectToAction("Login", "Hesap");
+            }
+
+            try
+            {
+                int musteriID = int.Parse(musteriIDClaim);
+                randevu.musteriID = musteriID;
+
+                // 9:00 ile 17:00 arasında saat kontrolü
+                if (randevu.randevu_saati < TimeSpan.FromHours(9) || randevu.randevu_saati > TimeSpan.FromHours(17))
                 {
-                    RandevuTarihi = model.RandevuTarihi,
-                    RandevuSaati = hour,
-                    IslemID = model.IslemID,
-                    CalisanID = model.CalisanID,
-                    MusteriID = musteriID
-                };
+                    ModelState.AddModelError("", "Randevu saati 9:00 ile 17:00 arasında olmalıdır.");
+                    return View(randevu);
+                }
+
+                // Saat başı olup olmadığını kontrol et
+                if (randevu.randevu_saati.Minutes != 0)
+                {
+                    ModelState.AddModelError("", "Randevu saati sadece saat başı olmalıdır.");
+                    return View(randevu);
+                }
 
                 bool mevcutRandevu = _context.Randevular
-                    .Any(r => r.calisanID == randevu.CalisanID
-                              && r.randevu_tarihi == randevu.RandevuTarihi
-                              && r.randevu_saati == randevu.RandevuSaati
+                    .Any(r => r.calisanID == randevu.calisanID
+                              && r.randevu_tarihi == randevu.randevu_tarihi
+                              && r.randevu_saati == randevu.randevu_saati
                               && !r.onay_durumu);
 
                 if (mevcutRandevu)
                 {
                     ModelState.AddModelError("", "Seçilen tarih ve saat için çalışan zaten meşgul.");
-                    return View(model);
+                    return View(randevu);
                 }
 
                 if (ModelState.IsValid)
@@ -71,30 +99,29 @@ namespace web_odev_24.Controllers
                     return RedirectToAction("Randevu_Istekleri", "Admin");
                 }
 
-                return View(model);
+                return View(randevu);
             }
             catch (FormatException)
             {
                 return RedirectToAction("Login", "Hesap");
             }
         }
-
         // Dinamik çalışan listesi için AJAX endpoint
         [HttpGet]
-        public JsonResult GetCalisanlarByIslem(int islemID)
+       public JsonResult GetCalisanlarByIslem(int islemID)
+{
+    // Seçilen işleme uygun çalışanları filtrele
+    var calisanlar = _context.Calisanlar
+        .Where(c => c.islemID == islemID)  // Seçilen işleme uygun çalışanlar
+        .Select(c => new
         {
-            // Seçilen işleme uygun çalışanları filtrele
-            var calisanlar = _context.Calisanlar
-                .Where(c => c.islemID == islemID)  // Seçilen işleme uygun çalışanlar
-                .Select(c => new
-                {
-                    c.calisanID,
-                    AdSoyad = c.calisan_ad + " " + c.calisan_soyad
-                })
-                .ToList();
+            c.calisanID,
+            AdSoyad = c.calisan_ad + " " + c.calisan_soyad
+        })
+        .ToList();
 
-            return Json(calisanlar);
-        }
+    return Json(calisanlar);
+}
 
         // Randevu isteklerini listeleme (Admin)
         public async Task<IActionResult> Randevu_Istekleri()
