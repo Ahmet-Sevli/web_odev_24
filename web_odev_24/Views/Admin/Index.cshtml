@@ -1,0 +1,42 @@
+﻿@model IEnumerable<web_odev_24.Models.Islem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>İşlem Bilgileri</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.islem_ad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.islem_ucret)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.islem_sure)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.islem_ad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.islem_ucret)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.islem_sure)
+                </td>
+               
+            </tr>
+        }
+    </tbody>
+</table>

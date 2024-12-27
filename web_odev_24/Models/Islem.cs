@@ -26,7 +26,7 @@ namespace web_odev_24.Models
         public int islem_sure { get; set; }
 
 
-        public ICollection<Calisan> Calisanlar { get; set; }
+        public ICollection<Calisan>? Calisanlar { get; set; }
 
     }
 }
