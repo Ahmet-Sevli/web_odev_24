@@ -192,7 +192,62 @@ namespace web_odev_24.Controllers
 
 
 
-      
+        public async Task<IActionResult> UpdateProfile()
+        {
+            // Oturum açmış kullanıcının müşteri ID'sini al
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account"); // Eğer kullanıcı oturum açmamışsa login sayfasına yönlendir
+            }
+
+            // Kullanıcıya ait müşteri bilgisini çek
+            var musteri = await _context.Musteriler.FindAsync(int.Parse(userId));
+
+            if (musteri == null)
+            {
+                return NotFound(); // Eğer müşteri bulunamazsa hata mesajı göster
+            }
+
+            return View(musteri); // Müşteri bilgilerini düzenlemek için view'yi döndür
+        }
+
+        // POST: Musteri/UpdateProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile([Bind("musteriID,musteri_ad,musteri_soyad,musteri_telefon,musteri_email,musteri_sifre")] Musteri musteri)
+        {
+            if (musteri.musteriID != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            {
+                return Unauthorized(); // Başka bir müşteri bilgilerini güncellemeye çalışıyorsa, yetkisiz erişim
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(musteri);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!MusteriExists(musteri.musteriID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index","Home"); // Başarılı güncellemeyi takiben ana sayfaya yönlendir
+            }
+            return View(musteri); // Model geçerli değilse formu tekrar göster
+        }
+
+
+
 
     }
 

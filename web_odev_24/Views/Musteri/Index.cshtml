@@ -41,11 +41,13 @@
                 @Html.DisplayFor(modelItem => item.musteri_sifre)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.musteriID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.musteriID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.musteriID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.musteriID" class="btn btn-outline-success">Düzenle</a>
+                    <a asp-action="Details" asp-route-id="@item.musteriID" class="btn btn-outline-info">Detay</a>
+                    <a asp-action="Delete" asp-route-id="@item.musteriID" class="btn btn-outline-danger">Sil</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+

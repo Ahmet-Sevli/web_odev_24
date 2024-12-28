@@ -31,11 +31,13 @@
                 @Html.DisplayFor(modelItem => item.islem_sure)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.islemID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.islemID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.islemID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.islemID" class="btn btn-outline-success">Düzenle</a>
+                    <a asp-action="Details" asp-route-id="@item.islemID" class="btn btn-outline-info">Detay</a>
+                    <a asp-action="Delete" asp-route-id="@item.islemID" class="btn btn-outline-danger">Sil</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+

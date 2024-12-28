@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Haftanın Çalışanı";
+}
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h1>🏆 Haftanın Çalışanı 🏆</h1>
+
+        @if (ViewBag.HaftaninCalisani != null)
+        {
+            <div class="card mt-4 shadow-lg" style="width: 18rem; margin: auto;">
+                <div class="card-body">
+                    <h5 class="card-title">Tebrikler, @ViewBag.HaftaninCalisani!</h5>
+                    <p class="card-text">
+                        Bu hafta @ViewBag.RandevuSayisi randevu ile en çok tercih edilen çalışan oldunuz!
+                    </p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted mt-4">@ViewBag.Message</p>
+        }
+    </div>
+</div>

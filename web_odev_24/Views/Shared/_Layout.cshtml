@@ -85,6 +85,15 @@
                             </li>
                         }
 
+
+                        @if (currentUserRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="HaftaninCalisani">Haftanın Çalışanı</a>
+                            </li>
+                        }
+
+
                         @if (currentUserRole == "Musteri")
                         {
                             <li class="nav-item">

@@ -212,7 +212,34 @@ public class RandevuController : Controller
 
 
 
+    // Haftanın Çalışanı
+    public IActionResult HaftaninCalisani()
+    {
+        // Çalışanların randevu sayısını gruplandırarak hesapla
+        var calisanRandevuSayilari = _context.Randevular
+            .Include(r => r.Calisan)
+            .GroupBy(r => r.calisanID)
+            .Select(g => new
+            {
+                Calisan = g.FirstOrDefault().Calisan,
+                RandevuSayisi = g.Count()
+            })
+            .OrderByDescending(c => c.RandevuSayisi)
+            .FirstOrDefault();
 
+        // Eğer herhangi bir randevu yoksa, uygun mesaj göster
+        if (calisanRandevuSayilari == null || calisanRandevuSayilari.Calisan == null)
+        {
+            ViewBag.Message = "Bu hafta için herhangi bir çalışan verisi bulunmamaktadır.";
+            return View();
+        }
+
+        // Çalışanı ViewBag üzerinden View'e gönder
+        ViewBag.HaftaninCalisani = calisanRandevuSayilari.Calisan.AdSoyad;
+        ViewBag.RandevuSayisi = calisanRandevuSayilari.RandevuSayisi;
+
+        return View();
+    }
 
 
 
