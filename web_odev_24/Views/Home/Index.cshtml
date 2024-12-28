@@ -1,3 +1,57 @@
 ﻿@{
-	ViewData["Title"] = "Home Page";
-} <div class="background-image"> <div class="text-center content"> <h1 class="display-4">Berberinize Hoş Geldiniz</h1> <p>En iyi saç ve sakal kesimi için buradayız.</p> </div> </div>
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #EAE8DC; /* Sayfanın arka plan rengi */
+        }
+
+        .background-image {
+            background-image: url('/images/foto.jpg'); /* Fotoğrafın yüklü olduğu yolu buraya ekleyin */
+            background-size: contain; /* Resmi sayfa boyutuna göre ölçeklendirir */
+            background-position: center; /* Resmi merkeze hizalar */
+            background-repeat: no-repeat; /* Tekrar etmeyi engeller */
+            width: 100%;
+            height: 100vh; /* Tam ekran yüksekliği sağlar */
+            position: absolute; /* Konumlandırmayı yapar */
+            top: 0;
+            left: 0;
+        }
+
+        .content {
+            background: rgba(0, 0, 128, 0.7); /* Yarı şeffaf koyu mavi arka plan */
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1; /* İçeriği öne çıkarır */
+            position: relative; /* İçeriği konumlandırır */
+        }
+
+        .navbar {
+            z-index: 2; /* Navbarı en öne alır */
+            position: relative; /* Navbarı konumlanırır */
+            
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="background-image"></div>
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh; ">
+        <div class="text-center content" style="background-color: rgba(140, 140, 136, 0.5);">
+            <h1 class="display-4">Berberinize Hoş Geldiniz</h1>
+            <p class="lead">En iyi saç ve sakal kesimi için buradayız.</p>
+        </div>
+    </div>
+</body>
+</html>

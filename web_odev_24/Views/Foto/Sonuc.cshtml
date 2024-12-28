@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "API İşlem Sonucu";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">API İşlem Sonucu</h2>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Base64Image))
+        {
+            <div class="text-center">
+                <h3 class="mb-3">Görsel:</h3>
+                <img src="data:image/jpeg;base64,@ViewBag.Base64Image" alt="Sonuç Görseli" class="img-thumbnail" style="max-width: 30%; height: auto;" />
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger text-center">
+                <strong>Görsel yüklenemedi.</strong>
+            </div>
+        }
+
+        <div class="text-center mt-4">
+            <a href="/Foto/Yukle" class="btn btn-primary">Yeni bir resim yükle</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

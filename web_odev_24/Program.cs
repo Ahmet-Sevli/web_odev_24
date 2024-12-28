@@ -34,17 +34,7 @@ builder.Services.AddAuthorization(options =>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+builder.Services.AddHttpClient();
 
 
 
@@ -74,3 +64,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+
+
