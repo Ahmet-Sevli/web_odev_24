@@ -1,0 +1,49 @@
+﻿@model IEnumerable<web_odev_24.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Randevular";
+}
+
+<h2>Randevular</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Müşteri</th>
+            <th>İşlem</th>
+            <th>Çalışan</th>
+            <th>Randevu Tarihi</th>
+            <th>Randevu Saati</th>
+            <th>Onay Durumu</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var randevu in Model)
+        {
+            <tr>
+                <td>@randevu.Musteri.musteri_ad @randevu.Musteri.musteri_soyad</td>
+                <td>@randevu.Islem.islem_ad</td>
+                <td>@randevu.Calisan.calisan_ad @randevu.Calisan.calisan_soyad</td>
+                <td>@randevu.randevu_tarihi.ToString("dd/MM/yyyy")</td>
+                <td>@randevu.randevu_saati.ToString(@"hh\:mm")</td>
+                <td>@(randevu.onay_durumu ? "Onaylı" : "Onaysız")</td>
+                <td>
+                    @if (!randevu.onay_durumu)
+                    {
+                        <a asp-action="Onayla" asp-controller="Randevu" asp-route-id="@randevu.randevuID" class="btn btn-success">Onayla</a>
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+}
+
+
+

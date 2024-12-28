@@ -42,14 +42,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (currentUserRole == "Admin"){
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Musteri" asp-action="Create">Müşteri ekle</a>
-                        </li>
-                        }
+                        
+                       
+                        
                         @if (currentUserRole == "Admin")
                         {
                             <li class="nav-item">
@@ -68,9 +63,48 @@
                         }
 
                         
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Randevu_Al">Randevu Al</a>
-                        </li>
+                        @if (currentUserRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Randevular">Randevular</a>
+                            </li>
+                        }
+
+
+                        @if (currentUserRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Islem" asp-action="Index">İşlemler</a>
+                            </li>
+                        }
+
+                        @if (currentUserRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Islem" asp-action="Create">İşlem Ekle</a>
+                            </li>
+                        }
+
+                        @if (currentUserRole == "Musteri")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Randevu_Al">Randevu Al</a>
+                            </li>
+                        }
+
+                         @if (currentUserRole == "Musteri")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Randevu" asp-action="Randevum">Randevum</a>
+                            </li>
+                        }
+
+                        @if (currentUserRole == "Musteri")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Foto" asp-action="Yukle">Öneri Al</a>
+                            </li>
+                        }
 
 
                     </ul>
@@ -113,11 +147,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - web_odev_24 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

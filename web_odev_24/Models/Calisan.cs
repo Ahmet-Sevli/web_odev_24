@@ -18,7 +18,10 @@ namespace web_odev_24.Models
         [Display(Name = "Çalışan soyadı")]
         public string calisan_soyad { get; set; }
 
-
+        public string AdSoyad { get
+            {
+                return calisan_ad + " " + calisan_soyad;
+            } }
 
         [Required(ErrorMessage = "Çalışan telefonu boş bırakılamaz.")]
         [Phone(ErrorMessage = "Lütfen geçerli bir telefon numarası girin.")]

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<web_odev_24.Models.Randevu>
+
+<h2>Randevularım</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Saat</th>
+            <th>İşlem</th>
+            <th>Çalışan</th>
+            <th>Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var randevu in Model)
+        {
+            <tr>
+                <td>@randevu.randevu_tarihi.ToShortDateString()</td>
+                <td>@randevu.randevu_saati</td>
+                <td>@randevu.Islem?.islem_ad</td>
+                <td>@randevu.Calisan?.AdSoyad</td>
+                <td>
+                    @if (randevu.onay_durumu)
+                    {
+                        <span class="text-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Onay Bekliyor</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

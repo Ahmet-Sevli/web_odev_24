@@ -90,10 +90,10 @@ namespace web_odev_24.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                
 
 
-                return RedirectToAction("Index","Home");
+
+                return RedirectToAction("Index", "Home");
             }
             return View(musteri);
         }
@@ -186,5 +186,40 @@ namespace web_odev_24.Controllers
         {
             return _context.Musteriler.Any(e => e.musteriID == id);
         }
+
+
+
+
+
+
+      
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

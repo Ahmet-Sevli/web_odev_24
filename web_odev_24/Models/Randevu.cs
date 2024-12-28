@@ -18,15 +18,15 @@ namespace web_odev_24.Models
 
         [Required(ErrorMessage = "Bir işlem seçilmelidir.")]
         public int islemID { get; set; }
-        public Islem Islem { get; set; }
+        public Islem? Islem { get; set; }
 
         [Required(ErrorMessage = "Bir çalışan seçilmelidir.")]
         public int calisanID { get; set; }
-        public Calisan Calisan { get; set; }
+        public Calisan? Calisan { get; set; }
 
         [Required(ErrorMessage = "Bir müşteri seçilmelidir.")]
         public int musteriID { get; set; }
-        public Musteri Musteri { get; set; }
+        public Musteri? Musteri { get; set; }
 
         [Display(Name = "Admin Onayı")]
         public bool onay_durumu { get; set; } = false; // Varsayılan olarak onay bekliyor
